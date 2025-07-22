@@ -1,0 +1,27 @@
+# Bytecode-Dateien
+__pycache__/
+*.py[cod]
+
+# Virtuelle Umgebungen (falls du eine hast)
+venv/
+env/
+.venv/
+.env/
+
+# Jupyter Notebook Checkpoints
+.ipynb_checkpoints/
+
+# Daten-Dateien (große CSVs, Excel etc. – je nach Projekt)
+data/
+*.csv
+*.xlsx
+
+# Log-Dateien
+*.log
+
+# System-Dateien (macOS, Windows)
+.DS_Store
+Thumbs.db
+
+# VSCode Einstellungen (optional)
+.vscode/
