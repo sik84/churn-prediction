@@ -1,8 +1,7 @@
 import pandas as pd
 
 # Datenquelle
-url = "https://people.sc.fsu.edu/~jburkardt/data/csv/hw_200.csv"
-df = pd.read_csv(url)
+df = pd.read_csv('/mnt/c/Users/Stefan/Downloads/simulated_churn_data.csv')
 
 # Basisinfos
 print("\nSpalten im Datensatz:")
