@@ -33,6 +33,16 @@ Der Datensatz ist synthetisch generiert (nicht vertraulich) und enthält folgend
 - **Jahres- und Zwei-Jahres-Verträge** haben eine signifikant geringere Churn-Rate.- **Kreditkartenzahlung** ist mit einer niedrigeren Kündigungsquote verbunden.
 - Kunden, die nicht gekündigt haben (Churn = 0), zeigen tendenziell eine höhere und stabilere Nutzung pro Monat.
 
+## 🔍 Konkrete Mehrwerte:
+
+- Frühwarnsystem für Kündigungsrisiken → Der analysierte Zusammenhang zwischen Vertragstyp & Churn zeigt, wo gezielte Maßnahmen lohnen.
+
+- Nutzungsbasierte Segmentierung → Boxplot-Analyse offenbart Nutzungsverhalten aktiver vs. gekündigter Kunden.
+
+- Verhaltensbasierte Interventionspunkte → Login-Histogramm liefert Hinweise für Inaktivität und ermöglicht gezielte Re-Engagement-Kampagnen.
+
+- Modellbasierte Vorhersage von Kündigungen (Logistische Regression) → Unternehmen können zukünftige Churns antizipieren und Präventivmaßnahmen einleiten.
+
 ## 🛠️ Technologien
 
 - Python 3
@@ -57,9 +67,6 @@ Der Datensatz ist synthetisch generiert (nicht vertraulich) und enthält folgend
 
 
 ## 🧠 Nächste Schritte (optional)
-
-- Feature Engineering
-- Modellierung (Logistische Regression)
 
 ---
 
