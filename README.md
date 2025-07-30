@@ -66,8 +66,6 @@ Der Datensatz ist synthetisch generiert (nicht vertraulich) und enthält folgend
 └── requirements.txt
 
 
-## 🧠 Nächste Schritte (optional)
-
 ---
 
 🚀 Dieses Projekt ist Teil meines Data-Science-Portfolios und dient zur Demonstration typischer Fragestellungen im Bereich **Kundenbindung & Business Analytics**.
