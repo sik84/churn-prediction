@@ -69,3 +69,7 @@ Der Datensatz ist synthetisch generiert (nicht vertraulich) und enthält folgend
 ---
 
 🚀 Dieses Projekt ist Teil meines Data-Science-Portfolios und dient zur Demonstration typischer Fragestellungen im Bereich **Kundenbindung & Business Analytics**.
+
+📂 Datenbasis  
+Die verwendeten Daten sind simuliert (keine echten Kundendaten).  
+Sie dienen ausschließlich Demonstrations- und Lernzwecken.  
