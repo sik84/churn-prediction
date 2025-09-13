@@ -52,6 +52,7 @@ Der Datensatz ist synthetisch generiert (nicht vertraulich) und enthält folgend
 
 ## 📁 Struktur
 
+```
 .
 ├── LICENSE
 ├── README.md
@@ -64,7 +65,7 @@ Der Datensatz ist synthetisch generiert (nicht vertraulich) und enthält folgend
 ├── notebooks
 │   └── exploration.ipynb
 └── requirements.txt
-
+```
 
 ---
 
