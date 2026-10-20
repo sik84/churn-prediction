@@ -28,11 +28,11 @@ print(df.isnull().sum())
 
 
 # Zielspalte Churn (nur wenn vorhanden)
-if "Churn" in df.columns:
+if "churn" in df.columns:
     print("\nChurn-Verteilung:")
-    print(df["Churn"].value_counts(normalize=True))
+    print(df["churn"].value_counts(normalize=True))
 else:
-    print("\nKeine 'Churn'-Spalte im Datensatz. (Kein Problem für generelle EDA)")
+    print("\nKeine 'churn'-Spalte im Datensatz. (Kein Problem für generelle EDA)")
 
 
 # Vorschau
@@ -41,7 +41,7 @@ print("\nDatenvorschau:")
 print(df.head())
 
 # Gruppierte Churn-Rate nach Vertragstyp
-churn_by_contract = df.groupby("ContractType")["Churn"].mean()
+churn_by_contract = df.groupby("contract_type")["churn"].mean()
 
 # Plot
 plt.figure(figsize=(8, 5))
@@ -55,46 +55,77 @@ plt.tight_layout()
 plt.savefig("bar_churn_by_contract.png")
 plt.clf()
 
-# Boxplot für UsageHours
+# Boxplot: Kundendauer nach Churn-Status
 plt.figure(figsize=(8, 5))
-sns.boxplot(x="Churn", y="UsageHours", data=df, palette=[colors["boxplot"], "lightgray"])
-plt.title("Monatliche Nutzung nach Churn-Status")
-plt.xlabel("Churn (0 = aktiv, 1 = gekündigt)")
-plt.ylabel("Monatliche Nutzungsstunden")
-plt.grid(True, axis='y', linestyle="--", alpha=0.5)
+sns.boxplot(
+    x="churn",
+    y="tenure_months",
+    data=df,
+    color=colors["boxplot"]
+)
+plt.title("Kundendauer nach Churn-Status")
+plt.xlabel("Churn (0 = geblieben, 1 = gekündigt)")
+plt.ylabel("Bisherige Kundendauer (Monate)")
+plt.grid(True, axis="y", linestyle="--", alpha=0.5)
 plt.tight_layout()
-plt.savefig("boxplot_usage_by_churn.png")
+plt.savefig("boxplot_tenure_by_churn.png")
 plt.clf()
 
-# Histogramm: Verteilung der Logins
-
+# Histogramm: Verteilung der monatlichen Gebühren
 plt.figure(figsize=(8, 5))
-df["LastLogin"].hist(bins=20, color=colors["histogram"], edgecolor="black")
-plt.title("Verteilung: Tage seit letztem Login", fontsize=14)
-plt.xlabel("Tage seit letztem Login")
+df["monthly_charges"].hist(
+    bins=20,
+    color=colors["histogram"],
+    edgecolor="black"
+)
+plt.title("Verteilung der monatlichen Gebühren", fontsize=14)
+plt.xlabel("Monatliche Gebühren")
 plt.ylabel("Anzahl der Kunden")
-plt.grid(True, axis='y', linestyle="--", alpha=0.5)
+plt.grid(True, axis="y", linestyle="--", alpha=0.5)
 plt.tight_layout()
-plt.savefig("hist_last_login.png")
+plt.savefig("hist_monthly_charges.png")
 plt.clf()
 
 # --- Feature Engineering & Datenvorbereitung für Modellierung ---
 
 # One-Hot-Encoding für kategoriale Variablen
-df_encoded = pd.get_dummies(df, columns=["ContractType", "PaymentMethod"], drop_first=True)
+df_encoded = pd.get_dummies(
+    df,
+    columns=["contract_type"],
+    drop_first=True,
+    dtype=int
+)
 
 # Features und Ziel definieren
-X = df_encoded.drop(["CustomerID", "Churn"], axis=1)
-y = df_encoded["Churn"]
-
-# Numerische Features skalieren
-from sklearn.preprocessing import StandardScaler
-scaler = StandardScaler()
-X_scaled = scaler.fit_transform(X)
+X = df_encoded.drop(
+    columns=["customer_id", "churn", "gender"]
+)
+y = df_encoded["churn"]
 
 # Train-Test-Split
-from sklearn.model_selection import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.2,
+    random_state=42,
+    stratify=y
+)
+
+# Numerische Features skalieren
+scaler = StandardScaler()
+
+numeric_features = ["tenure_months", "monthly_charges"]
+
+X_train = X_train.copy()
+X_test = X_test.copy()
+
+X_train[numeric_features] = scaler.fit_transform(
+    X_train[numeric_features]
+)
+
+X_test[numeric_features] = scaler.transform(
+    X_test[numeric_features]
+)
 
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
@@ -106,10 +137,25 @@ model.fit(X_train, y_train)
 # Vorhersage treffen
 y_pred = model.predict(X_test)
 
+y_proba = model.predict_proba(X_test)[:, 1]
+print("Kündigungswahrscheinlichkeiten (erste 10):", y_proba[:10])
+
+# Experiment: niedrigerer Schwellenwert
+y_pred_30 = (y_proba >= 0.30).astype(int)
+
+print("\nConfusion Matrix bei 30 %:")
+print(confusion_matrix(y_test, y_pred_30))
+
+print("\nClassification Report bei 30 %:")
+print(classification_report(y_test, y_pred_30, zero_division=0))
+
 # Ergebnisse anzeigen
 print("\n🔍 Modellbewertung:")
 print(f"Genauigkeit: {accuracy_score(y_test, y_pred):.2f}")
 print("\nKonfusionsmatrix:")
 print(confusion_matrix(y_test, y_pred))
 print("\nKlassifikationsbericht:")
-print(classification_report(y_test, y_pred))
+print(classification_report(y_test, y_pred, zero_division=0))
+print("Minimum:", y_proba.min())
+print("Maximum:", y_proba.max())
+print("Durchschnitt:", y_proba.mean())
