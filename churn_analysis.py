@@ -14,7 +14,7 @@ colors = {
 
 
 # Datenquelle
-df = pd.read_csv('/mnt/c/Users/Stefan/Downloads/simulated_churn_data.csv')
+df = pd.read_csv('data/simulated_churn_data.csv')
 
 # Basisinfos
 print("\nSpalten im Datensatz:")
