@@ -93,6 +93,8 @@ Das Projekt demonstriert, wie Unternehmen Kundendaten analysieren können, um m�
 
 ```text
 .
+├── data/
+│   └── simulated_churn_data.csv
 ├── .gitignore
 ├── LICENSE
 ├── README.md
